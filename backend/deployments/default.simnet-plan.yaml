@@ -52,11 +52,11 @@ plan:
         - emulated-contract-publish:
             contract-name: creators-data-storage
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: "contracts\\creators-data-storage.clar"
+            path: contracts/creators-data-storage.clar
             clarity-version: 2
         - emulated-contract-publish:
             contract-name: creators-platform
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
-            path: "contracts\\creators-platform.clar"
+            path: contracts/creators-platform.clar
             clarity-version: 2
       epoch: "2.4"

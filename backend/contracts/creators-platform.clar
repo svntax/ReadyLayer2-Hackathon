@@ -16,6 +16,10 @@
         (get-creator (principal) (response (optional {name: uint, description-hash: (buff 32), products: (list 10 uint), tier: uint}) uint))
         (get-creator-tier (principal) (response uint uint))
         (get-creator-products (principal) (response (list 10 uint) uint))
+        (get-product (uint) (response (optional {creator: principal, price: uint, amount-sold: uint, data-hash: (buff 32)}) uint))
+        (create-product (principal uint (buff 32)) (response uint uint))
+        (update-product (principal uint uint (buff 32)) (response bool uint))
+        (remove-product (principal uint) (response bool uint))
     )
 )
 
