@@ -10,7 +10,7 @@ export const userSession = new UserSession({ appConfig });
 function authenticate() {
   showConnect({
     appDetails: {
-      name: "Stacks Next.js Starter",
+      name: "Stacks Creator Platform",
       icon: window.location.origin + "/logo512.png",
     },
     redirectTo: "/",
