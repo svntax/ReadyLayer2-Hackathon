@@ -33,7 +33,7 @@
     principal
     {
         name: (string-utf8 32),
-        description-hash: (buff 32),
+        description-hash: (buff 64),
         products: (list 10 uint),
         tier: uint
     }
@@ -46,7 +46,7 @@
       creator: principal,
       price: uint,
       amount-sold: uint,
-      data-hash: (buff 32)
+      data-hash: (buff 64)
     }
 )
 
@@ -61,7 +61,7 @@
 )
 
 ;; Create a new profile for a creator.
-(define-public (create-profile (user-address principal) (display-name (string-utf8 32)) (new-description-hash (buff 32)))
+(define-public (create-profile (user-address principal) (display-name (string-utf8 32)) (new-description-hash (buff 64)))
     (begin
         (try! (is-contract-owner))
         (asserts! (is-none (map-get? creators user-address)) err-creator-already-exists)
@@ -77,7 +77,7 @@
 )
 
 ;; Update the profile of an existing creator.
-(define-public (update-profile (user-address principal) (display-name (string-utf8 32)) (new-description-hash (buff 32)))
+(define-public (update-profile (user-address principal) (display-name (string-utf8 32)) (new-description-hash (buff 64)))
     (let
         (
             (profile (unwrap! (map-get? creators user-address) err-creator-does-not-exist))
@@ -93,7 +93,7 @@
 )
 
 ;; Create a new product for a creator.
-(define-public (create-product (creator-address principal) (new-price uint) (new-data-hash (buff 32)))
+(define-public (create-product (creator-address principal) (new-price uint) (new-data-hash (buff 64)))
     (let
         (
             (creator-profile (unwrap! (get-creator creator-address) err-creator-does-not-exist))
@@ -126,7 +126,7 @@
 )
 
 ;; Update the given product's price and/or info.
-(define-public (update-product (creator-address principal) (product-id uint) (new-price uint) (new-data-hash (buff 32)))
+(define-public (update-product (creator-address principal) (product-id uint) (new-price uint) (new-data-hash (buff 64)))
     (let
         (
             (creator-products (unwrap! (get-creator-products creator-address) err-creator-does-not-exist))
