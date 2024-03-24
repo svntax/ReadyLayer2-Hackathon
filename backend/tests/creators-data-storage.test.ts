@@ -196,7 +196,7 @@ describe("Tests for creators data storage", () => {
     const removeProductResponse = simnet.callPublicFn(creatorsDataStorageContract, "remove-product", [Cl.standardPrincipal(address1), Cl.uint(5)], deployer);
     expect(removeProductResponse.result).toBeOk(Cl.bool(true));
 
-    // Get all products from address1 and confirm the 5th product id is now u0
+    // Get all products from address1 and confirm product 5 is gone
     getCreatorProductsResponse = simnet.callReadOnlyFn(creatorsDataStorageContract, "get-creator-products", [Cl.standardPrincipal(address1)], deployer);
     expect(getCreatorProductsResponse.result).toBeSome(Cl.list([Cl.uint(1), Cl.uint(2), Cl.uint(3), Cl.uint(4), Cl.uint(6), Cl.uint(7), Cl.uint(8), Cl.uint(9), Cl.uint(10)]));
     
