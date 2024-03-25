@@ -112,7 +112,7 @@ const ContractCallAddProduct = () => {
                             mb="16px"
                         />
                         <NumberInput
-                            label="Price"
+                            label="Price (STX)"
                             placeholder="Enter the price"
                             value={productPrice}
                             min={0}
