@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from 'next/navigation';
 
-import { Alert, Paper, Stack, Flex, Loader, Container, Text, Button, TextInput, Textarea } from '@mantine/core';
+import { Alert, Paper, Stack, Flex, Loader, Container, Text, Button, TextInput, Textarea, NumberInput } from '@mantine/core';
 import { IconInfoTriangle } from '@tabler/icons-react';
 
 import { useConnect } from "@stacks/connect-react";
@@ -11,7 +11,7 @@ import { StacksTestnet } from "@stacks/network";
 import {
     AnchorMode,
     PostConditionMode,
-    stringUtf8CV,
+    uintCV,
     bufferCV,
     contractPrincipalCV
 } from "@stacks/transactions";
@@ -20,9 +20,12 @@ import { userSession } from "./ConnectWallet";
 import { sha256 } from "js-sha256";
 import Link from "next/link";
 
-const ContractCallCreateProfile = () => {
-    const [displayName, setDisplayName] = useState('');
-    const [bio, setBio] = useState('');
+const ContractCallEditProduct = ({ productId }) => {
+    // TODO: pre-fill the edit form with the current data for the product
+    const [productName, setProductName] = useState('');
+    const [summary, setSummary] = useState('');
+    const [longDescription, setLongDescription] = useState('');
+    const [productPrice, setProductPrice] = useState(1);
 
     const router = useRouter();
 
@@ -33,20 +36,24 @@ const ContractCallCreateProfile = () => {
 
     const submitProfileData = (e) => {
         e.preventDefault();
-        createProfile(displayName, bio);
-        //const profile = userSession.loadUserData().profile.stxAddress;
-        //router.push(`/users/${profile.testnet}`);
+        editProduct();
     };
 
-    function createProfile(username, description) {
-        const descriptionHash = sha256.hex(description);
+    function editProduct() {
+        const productData = {
+            name: productName,
+            summary: summary,
+            descriptiion: longDescription
+        };
+        const productDataJsonString = JSON.stringify(productData);
+        const productDataHash = sha256(productDataJsonString);
         doContractCall({
             network: new StacksTestnet(),
             anchorMode: AnchorMode.Any,
             contractAddress: "STSN2NQMWNYSZ2373C1MD96QJVFNNKV8F033JAJ4",
             contractName: "creators-platform",
-            functionName: "create-profile",
-            functionArgs: [stringUtf8CV(username), bufferCV(Buffer.from(descriptionHash)), contractPrincipalCV("STSN2NQMWNYSZ2373C1MD96QJVFNNKV8F033JAJ4", "creators-data-storage")],
+            functionName: "update-product",
+            functionArgs: [uintCV(productId), uintCV(productPrice), bufferCV(Buffer.from(productDataHash)), contractPrincipalCV("STSN2NQMWNYSZ2373C1MD96QJVFNNKV8F033JAJ4", "creators-data-storage")],
             postConditionMode: PostConditionMode.Deny,
             postConditions: [],
             onFinish: (data) => {
@@ -78,7 +85,7 @@ const ContractCallCreateProfile = () => {
         const icon = <IconInfoTriangle />;
         return (
             <Stack mt="2rem" align="center">
-                <Text align="center" size="xl">Create Your Profile</Text>
+                <Text align="center" size="xl">Editing product</Text>
                 <Alert variant="light" color="red" title="User is not signed in!" icon={icon}>
                     You must be signed in to create a profile.
                 </Alert>
@@ -93,29 +100,46 @@ const ContractCallCreateProfile = () => {
         <Container mt="6rem">
             <Paper p="md" shadow="xs">
                 <Flex direction="column" align="center" justify="center" style={{  }}>
-                    <Text align="center" size="xl">Create Your Profile</Text>
+                    <Text align="center" size="xl">Editing product #{productId}</Text>
                     <form onSubmit={submitProfileData} style={{ width: "100%", maxWidth: "400px" }}>
                         <TextInput
-                            label="Display Name"
-                            placeholder="Enter your display name"
-                            value={displayName}
-                            maxLength="32"
-                            onChange={(e) => setDisplayName(e.target.value)}
+                            label="Product Name"
+                            placeholder="Enter product name"
+                            value={productName}
+                            onChange={(e) => setProductName(e.target.value)}
+                            required
+                            mb="16px"
+                        />
+                        <NumberInput
+                            label="Price (STX)"
+                            placeholder="Enter the price"
+                            value={productPrice}
+                            min={0}
+                            onChange={setProductPrice}
+                            required
+                            mb="16px"
+                        />
+                        <TextInput
+                            label="Summary"
+                            placeholder="Enter a short summary"
+                            value={summary}
+                            onChange={(e) => setSummary(e.target.value)}
                             required
                             mb="16px"
                         />
                         <Textarea
-                            label="Bio"
-                            placeholder="Describe yourself and what you create..."
-                            value={bio}
-                            onChange={(e) => setBio(e.target.value)}
+                            label="Long Description"
+                            placeholder="Enter a detailed description"
+                            value={longDescription}
+                            onChange={(e) => setLongDescription(e.target.value)}
                             required
                             mb="16px"
                             autosize
                             minRows={8}
                             maxRows={8}
                         />
-                        <Button type="submit">Create Profile</Button>
+                        
+                        <Button type="submit">Save and Publish</Button>
                         <Button ml="4px" color="gray" variant="subtle" onClick={() => router.back()}>Back</Button>
                     </form>
                 </Flex>
@@ -124,4 +148,4 @@ const ContractCallCreateProfile = () => {
     );
 };
 
-export default ContractCallCreateProfile;
+export default ContractCallEditProduct;
