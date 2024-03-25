@@ -8,9 +8,11 @@ import { useDisclosure } from "@mantine/hooks";
 import { Modal, Grid, Card, Container, Flex, Stack, Alert, Loader, Notification, rem, Title, Text, Box, GridCol, Button } from "@mantine/core";
 import { IconX, IconInfoTriangle } from "@tabler/icons-react";
 
+import { Connect, useConnect } from "@stacks/connect-react";
 import { cvToValue, uintCV, callReadOnlyFunction, standardPrincipalCV, validateStacksAddress } from "@stacks/transactions";
 import { StacksTestnet } from "@stacks/network";
 import { userSession } from "../../../components/ConnectWallet";
+import ContractCallRemoveProduct from "@/components/ContractCallRemoveProduct";
 
 const CreatorProfilePage = ({ params }) => {
     const [userWallet, setUserWallet] = useState("");
@@ -21,6 +23,8 @@ const CreatorProfilePage = ({ params }) => {
     const [productIdToDelete, selectProductToDelete] = useState(0);
     const [errorVisibility, setErrorVisibility] = useState(false);
     const [userFound, setUserFound] = useState(false);
+
+    //const { doContractCall } = useConnect();
 
     const [opened, { open, close }] = useDisclosure(false);
 
@@ -179,13 +183,46 @@ const CreatorProfilePage = ({ params }) => {
         open();
     }
 
-    const removeProduct = () => {
+    const onProductRemoved = async () => {
+        const updatedProductsList = products.filter((product) => product.id !== productIdToDelete);
+        setProducts(updatedProductsList);
         selectProductToDelete(0);
         close();
-        // TODO: delete product and refresh
-        //callcontract productIdToDelete
-        router.refresh();
-    }
+    };
+
+    /*const removeProduct = async () => {
+        await doContractCall({
+            network: new StacksTestnet(),
+            anchorMode: AnchorMode.Any,
+            contractAddress: "STSN2NQMWNYSZ2373C1MD96QJVFNNKV8F033JAJ4",
+            contractName: "creators-platform",
+            functionName: "remove-product",
+            functionArgs: [uintCV(productIdToDelete), contractPrincipalCV("STSN2NQMWNYSZ2373C1MD96QJVFNNKV8F033JAJ4", "creators-data-storage")],
+            postConditionMode: PostConditionMode.Deny,
+            postConditions: [],
+            onFinish: (data) => {
+                console.log("onFinish:", data);
+                window
+                    .open(
+                        `https://explorer.hiro.so/txid/${data.txId}?chain=testnet`,
+                        "_blank"
+                    )
+                    .focus();
+                
+                
+                // TODO: delete the product from offchain storage
+                const updatedProductsList = products.filter((product) => product.id !== productIdToDelete);
+                setProducts(updatedProductsList);
+                selectProductToDelete(0);
+                close();
+                // Refresh the page
+                router.refresh();
+            },
+            onCancel: () => {
+                console.log("onCancel:", "Transaction was canceled");
+            },
+        });
+    }*/
 
     const cancelRemove = () => {
         close();
@@ -193,12 +230,25 @@ const CreatorProfilePage = ({ params }) => {
     }
 
     return (
+        <Connect
+            authOptions={{
+                appDetails: {
+                name: "Stacks Creator Platform",
+                },
+                redirectTo: "/",
+                onFinish: () => {
+                    window.location.reload();
+                },
+                userSession,
+            }}
+        >
         <Flex>
             <Modal opened={opened} onClose={close} title="Remove Product">
                 <Title order={3}>Are you sure you want to delete this product?</Title>
                 <Flex m="xs" gap="xs">
                     <Button variant="subtle" color="gray" onClick={cancelRemove}>Cancel</Button>
-                    <Button variant="filled" color="red" onClick={removeProduct}>Delete</Button>
+                    
+                    <ContractCallRemoveProduct productId={productIdToDelete} closeModal={onProductRemoved} />
                 </Flex>
             </Modal>
 
@@ -254,6 +304,8 @@ const CreatorProfilePage = ({ params }) => {
                 </Flex>
             </Container>
         </Flex>
+
+        </Connect>
     );
 };
 
