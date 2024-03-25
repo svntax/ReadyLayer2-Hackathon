@@ -96,7 +96,6 @@ const CreatorProfilePage = ({ params }) => {
                     setBio("Bio: " + userData.value["description-hash"].value);
                     const fetchedProducts = userData.value.products.value;
                     // Fetch product info for each product id
-                    console.log(fetchedProducts);
                     const productsParsed = [];
                     for(let i = 0; i < fetchedProducts.length; i++){
                         const productId = fetchedProducts[i].value;
@@ -109,7 +108,6 @@ const CreatorProfilePage = ({ params }) => {
                             senderAddress: senderAddress
                         });
                         const productResult = cvToValue(getProductResponse);
-                        console.log(productResult);
                         productsParsed.push({
                             name: "Product ID #" + productId,
                             description: productResult.value["data-hash"].value,

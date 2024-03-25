@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
+import { useRouter } from 'next/navigation';
+import { IconX } from "@tabler/icons-react";
 
-import { Paper, Text, Button, Stack } from '@mantine/core';
+import { Container, Notification, Paper, Text, TextInput, Button, Stack, rem } from '@mantine/core';
 
 import { StacksTestnet } from '@stacks/network';
 import { cvToValue, callReadOnlyFunction, Cl } from '@stacks/transactions';
@@ -16,6 +18,23 @@ export default function Home() {
   const [isClient, setIsClient] = useState(false);
   const [userFound, setUserFound] = useState(false);
   const [userAddress, setUserAddress] = useState("");
+  const [addressToSearch, setAddressToSearch] = useState("");
+  const [searchErrorVisibility, setSearchErrorVisibility] = useState(false);
+
+  const router = useRouter();
+  const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+
+  const searchUser = (e) => {
+    e.preventDefault();
+    if(addressToSearch){
+      setSearchErrorVisibility(false);
+      // Redirect to the creator's profile page
+      router.push(`/users/${addressToSearch}`);
+    }
+    else{
+      setSearchErrorVisibility(true);
+    }
+  };
 
   useEffect(() => {
     setIsClient(true);
@@ -71,6 +90,21 @@ export default function Home() {
         <div>
           <h2>Stacks Creator Platform</h2>
         </div>
+
+        <Container w="100%">
+            <TextInput
+              label="Search User"
+              placeholder="Enter an address..."
+              value={addressToSearch}
+              maxLength="64"
+              onChange={(e) => setAddressToSearch(e.target.value)}
+              mb="16px"
+            />
+            <Button onClick={searchUser}>Search</Button>
+            <Notification maw="300px" style={{display: searchErrorVisibility ? "" : "none"}} icon={xIcon} color="red" title="Error!" onClose={() => setSearchErrorVisibility(false)}>
+              Search cannot be empty.
+            </Notification>
+        </Container>
 
         <div>
           <ConnectWallet />
