@@ -75,7 +75,7 @@ const ContractCallEditProduct = ({ productId }) => {
     }
 
     if (!mounted || !userSession.isUserSignedIn()) {
-        if(!mounted){
+        if (!mounted) {
             return (
                 <Flex w="100vw" h="100vh" align="center" justify="center">
                     <Loader color="blue" />
@@ -90,7 +90,7 @@ const ContractCallEditProduct = ({ productId }) => {
                     You must be signed in to create a profile.
                 </Alert>
                 <Link href="/">
-                  <Button variant="default">Go back</Button>
+                    <Button variant="default">Go back</Button>
                 </Link>
             </Stack>
         );
@@ -98,52 +98,50 @@ const ContractCallEditProduct = ({ productId }) => {
 
     return (
         <Container mt="6rem">
-            <Paper p="md" shadow="xs">
-                <Flex direction="column" align="center" justify="center" style={{  }}>
-                    <Text align="center" size="xl">Editing product #{productId}</Text>
-                    <form onSubmit={submitProfileData} style={{ width: "100%", maxWidth: "400px" }}>
-                        <TextInput
-                            label="Product Name"
-                            placeholder="Enter product name"
-                            value={productName}
-                            onChange={(e) => setProductName(e.target.value)}
-                            required
-                            mb="16px"
-                        />
-                        <NumberInput
-                            label="Price (STX)"
-                            placeholder="Enter the price"
-                            value={productPrice}
-                            min={0}
-                            onChange={setProductPrice}
-                            required
-                            mb="16px"
-                        />
-                        <TextInput
-                            label="Summary"
-                            placeholder="Enter a short summary"
-                            value={summary}
-                            onChange={(e) => setSummary(e.target.value)}
-                            required
-                            mb="16px"
-                        />
-                        <Textarea
-                            label="Long Description"
-                            placeholder="Enter a detailed description"
-                            value={longDescription}
-                            onChange={(e) => setLongDescription(e.target.value)}
-                            required
-                            mb="16px"
-                            autosize
-                            minRows={8}
-                            maxRows={8}
-                        />
-                        
-                        <Button type="submit">Save and Publish</Button>
-                        <Button ml="4px" color="gray" variant="subtle" onClick={() => router.back()}>Back</Button>
-                    </form>
-                </Flex>
-            </Paper>
+            <Flex direction="column" align="center" justify="center" style={{}}>
+                <Text align="center" size="xl">Editing product #{productId}</Text>
+                <form onSubmit={submitProfileData} style={{ width: "100%", maxWidth: "400px" }}>
+                    <TextInput
+                        label="Product Name"
+                        placeholder="Enter product name"
+                        value={productName}
+                        onChange={(e) => setProductName(e.target.value)}
+                        required
+                        mb="16px"
+                    />
+                    <NumberInput
+                        label="Price (STX)"
+                        placeholder="Enter the price"
+                        value={productPrice}
+                        min={0}
+                        onChange={setProductPrice}
+                        required
+                        mb="16px"
+                    />
+                    <TextInput
+                        label="Summary"
+                        placeholder="Enter a short summary"
+                        value={summary}
+                        onChange={(e) => setSummary(e.target.value)}
+                        required
+                        mb="16px"
+                    />
+                    <Textarea
+                        label="Long Description"
+                        placeholder="Enter a detailed description"
+                        value={longDescription}
+                        onChange={(e) => setLongDescription(e.target.value)}
+                        required
+                        mb="16px"
+                        autosize
+                        minRows={8}
+                        maxRows={8}
+                    />
+
+                    <Button type="submit">Save and Publish</Button>
+                    <Button ml="4px" color="gray" variant="subtle" onClick={() => router.back()}>Back</Button>
+                </form>
+            </Flex>
         </Container>
     );
 };

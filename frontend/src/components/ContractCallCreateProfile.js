@@ -68,7 +68,7 @@ const ContractCallCreateProfile = () => {
     }
 
     if (!mounted || !userSession.isUserSignedIn()) {
-        if(!mounted){
+        if (!mounted) {
             return (
                 <Flex w="100vw" h="100vh" align="center" justify="center">
                     <Loader color="blue" />
@@ -83,7 +83,7 @@ const ContractCallCreateProfile = () => {
                     You must be signed in to create a profile.
                 </Alert>
                 <Link href="/">
-                  <Button variant="default">Go back</Button>
+                    <Button variant="default">Go back</Button>
                 </Link>
             </Stack>
         );
@@ -91,35 +91,33 @@ const ContractCallCreateProfile = () => {
 
     return (
         <Container mt="6rem">
-            <Paper p="md" shadow="xs">
-                <Flex direction="column" align="center" justify="center" style={{  }}>
-                    <Text align="center" size="xl">Create Your Profile</Text>
-                    <form onSubmit={submitProfileData} style={{ width: "100%", maxWidth: "400px" }}>
-                        <TextInput
-                            label="Display Name"
-                            placeholder="Enter your display name"
-                            value={displayName}
-                            maxLength="32"
-                            onChange={(e) => setDisplayName(e.target.value)}
-                            required
-                            mb="16px"
-                        />
-                        <Textarea
-                            label="Bio"
-                            placeholder="Describe yourself and what you create..."
-                            value={bio}
-                            onChange={(e) => setBio(e.target.value)}
-                            required
-                            mb="16px"
-                            autosize
-                            minRows={8}
-                            maxRows={8}
-                        />
-                        <Button type="submit">Create Profile</Button>
-                        <Button ml="4px" color="gray" variant="subtle" onClick={() => router.back()}>Back</Button>
-                    </form>
-                </Flex>
-            </Paper>
+            <Flex direction="column" align="center" justify="center" style={{}}>
+                <Text align="center" size="xl">Create Your Profile</Text>
+                <form onSubmit={submitProfileData} style={{ width: "100%", maxWidth: "400px" }}>
+                    <TextInput
+                        label="Display Name"
+                        placeholder="Enter your display name"
+                        value={displayName}
+                        maxLength="32"
+                        onChange={(e) => setDisplayName(e.target.value)}
+                        required
+                        mb="16px"
+                    />
+                    <Textarea
+                        label="Bio"
+                        placeholder="Describe yourself and what you create..."
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        required
+                        mb="16px"
+                        autosize
+                        minRows={8}
+                        maxRows={8}
+                    />
+                    <Button type="submit">Create Profile</Button>
+                    <Button ml="4px" color="gray" variant="subtle" onClick={() => router.back()}>Back</Button>
+                </form>
+            </Flex>
         </Container>
     );
 };
