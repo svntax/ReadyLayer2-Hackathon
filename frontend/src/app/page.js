@@ -120,7 +120,7 @@ export default function Home() {
           <ConnectWallet />
 
           {userSession.isUserSignedIn() ?
-            <Paper p="md" shadow="xs" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '320px', height: '160px' }}>
+            <Paper p="md" shadow="xs" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '160px' }}>
               {userFound ? 
                 <Stack>
 
