@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { AppConfig, showConnect, UserSession } from "@stacks/connect";
+import { Container, Title, Text, Button } from '@mantine/core';
 
 const appConfig = new AppConfig(["store_write", "publish_data"]);
 
@@ -31,20 +32,17 @@ const ConnectWallet = () => {
 
   if (mounted && userSession.isUserSignedIn()) {
     return (
-      <div className="Container">
-        <button className="Connect" onClick={disconnect}>
-          Disconnect Wallet
-        </button>
-        <p>mainnet: {userSession.loadUserData().profile.stxAddress.mainnet}</p>
-        <p>testnet: {userSession.loadUserData().profile.stxAddress.testnet}</p>
-      </div>
+      <Container my="md">
+        <Title order={4}>User Info:</Title>
+        <Text>mainnet: {userSession.loadUserData().profile.stxAddress.mainnet}</Text>
+        <Text>testnet: {userSession.loadUserData().profile.stxAddress.testnet}</Text>
+        <Button mt="sm"onClick={disconnect} variant="outline">Sign Out</Button>
+      </Container>
     );
   }
 
   return (
-    <button className="Connect" onClick={authenticate}>
-      Connect Wallet
-    </button>
+    <Button onClick={authenticate} >Connect Wallet</Button>
   );
 };
 

@@ -4,9 +4,10 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import { useRouter } from 'next/navigation';
-import { IconX } from "@tabler/icons-react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 
-import { Container, Notification, Paper, Text, TextInput, Button, Stack, rem } from '@mantine/core';
+import { Container, Notification, Paper, Title, Text, TextInput, Button, Stack, rem } from '@mantine/core';
+import { notifications } from "@mantine/notifications";
 
 import { StacksTestnet } from '@stacks/network';
 import { cvToValue, callReadOnlyFunction, Cl } from '@stacks/transactions';
@@ -23,6 +24,7 @@ export default function Home() {
 
   const router = useRouter();
   const xIcon = <IconX style={{ width: rem(20), height: rem(20) }} />;
+  const searchIcon = <IconSearch style={{ width: rem(16), height: rem(16) }} />;
 
   const searchUser = (e) => {
     e.preventDefault();
@@ -65,6 +67,14 @@ export default function Home() {
               setUserFound(false);
               setUserAddress("");
           }
+      })
+      .catch((err) => {
+        console.log(err);
+        notifications.show({
+          color: 'red',
+          title: 'Contract error',
+          message: 'An error occurred when attempting to call a contract.',
+        });
       });
     }
   }, []);
@@ -87,12 +97,12 @@ export default function Home() {
     >
       <main className={styles.main}>
 
-        <div>
-          <h2>Stacks Creator Platform</h2>
-        </div>
+        <Title order={1} mb="lg">Stacks Creator Platform</Title>
 
         <Container w="100%">
             <TextInput
+              leftSectionPointerEvents="none"
+              leftSection={searchIcon}
               label="Search User"
               placeholder="Enter an address..."
               value={addressToSearch}
@@ -101,16 +111,16 @@ export default function Home() {
               mb="16px"
             />
             <Button onClick={searchUser}>Search</Button>
-            <Notification maw="300px" style={{display: searchErrorVisibility ? "" : "none"}} icon={xIcon} color="red" title="Error!" onClose={() => setSearchErrorVisibility(false)}>
+            <Notification my="sm" maw="300px" display={searchErrorVisibility ? "" : "none"} position="absolute" icon={xIcon} color="red" title="Error!" onClose={() => setSearchErrorVisibility(false)}>
               Search cannot be empty.
             </Notification>
         </Container>
 
-        <div>
+        <Stack align="center">
           <ConnectWallet />
 
           {userSession.isUserSignedIn() ?
-            <Paper p="md" shadow="xs" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '320px' }}>
+            <Paper p="md" shadow="xs" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '320px', height: '160px' }}>
               {userFound ? 
                 <Stack>
 
@@ -130,11 +140,11 @@ export default function Home() {
               }
             </Paper>
             :
-            <div>
-              <p>Sign in to create a profile</p>
-            </div>
+            <Container>
+              <Text>Sign in to create a profile</Text>
+            </Container>
           }
-        </div>
+        </Stack>
 
         <div className={styles.grid}>
           

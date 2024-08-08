@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useDisclosure } from "@mantine/hooks";
 import { Modal, Grid, Card, Container, Flex, Stack, Alert, Loader, Notification, rem, Title, Text, Box, GridCol, Button } from "@mantine/core";
 import { IconX, IconInfoTriangle } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 
 import { Connect, useConnect } from "@stacks/connect-react";
 import { cvToValue, uintCV, callReadOnlyFunction, standardPrincipalCV, validateStacksAddress } from "@stacks/transactions";
@@ -129,6 +130,14 @@ const CreatorProfilePage = ({ params }) => {
                     setUsername("This user does not have a profile page.");
                     setBio("If you just created a profile, try again later.");
                 }
+            })
+            .catch((err) => {
+                console.log(err);
+                notifications.show({
+                    color: 'red',
+                    title: 'Contract error',
+                    message: 'An error occurred when attempting to call a contract.',
+                });
             });
     
             setUsername("No user found.");

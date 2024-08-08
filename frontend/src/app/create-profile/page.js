@@ -12,11 +12,11 @@ const CreateProfilePage = () => {
         <Connect
             authOptions={{
                 appDetails: {
-                name: "Stacks Creator Platform",
+                    name: "Stacks Creator Platform",
                 },
                 redirectTo: "/",
                 onFinish: () => {
-                window.location.reload();
+                    window.location.reload();
                 },
                 userSession,
             }}

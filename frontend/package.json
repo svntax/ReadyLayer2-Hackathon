@@ -11,6 +11,7 @@
   "dependencies": {
     "@mantine/core": "^7.6.2",
     "@mantine/hooks": "^7.6.2",
+    "@mantine/notifications": "^7.12.0",
     "@stacks/connect": "^7.4.0",
     "@stacks/connect-react": "^22.2.0",
     "@tabler/icons-react": "^3.1.0",
